@@ -111,24 +111,33 @@ export async function processUrl(
 }
 
 export async function downloadTrackAction(trackId: string): Promise<{ success: boolean; file?: { name: string; content: string }; error?: string }> {
-    // In a real application, this would fetch the track from a source and return it.
-    // For this demo, we'll return a placeholder file.
-    console.log(`Downloading track ${trackId}`);
-
-    // Simulate a delay for download
-    await new Promise(resolve => setTimeout(resolve, 1500));
-
-    // Simulate a potential error
-    if (Math.random() < 0.1) {
-        return { success: false, error: 'A random error occurred during download.' };
-    }
-
-    return {
-        success: true,
-        file: {
-            name: `${trackId}.mp3`,
-            // This is a valid, silent 1-second MP3 file encoded in base64
-            content: "data:audio/mpeg;base64,SUQzBAAAAAABEVRYWFgAAAAtAAADY29tbWVudABCaWdTb3VuZEJhbmsuY29tIC8gTGFTb25vdGhlcXVlLm9yZwBURU5DAAAAHQAAA1N3aXRjaCBvZiB0aGUgUmFkaW9FABRXQVhQAAAAAAAAD3B1Ymxpc2hlcgBURU5DAAAAHQAAA1N3aXRjaCBvZiB0aGUgUmFkaW9UQVBCgAAAABIAAAAAVGhlIEV4YW1wbGVzAABAeXRlcnJhbAAMAAAASElMTEVOSU5HAAAAAABNMjgxAAAANwAAAFRFUgAAAAgAAABVVVBURUxNAAAAEgAAAFRIQ09SRAAAAD4AAABPQkZJRAAAAAA8AAAAaHR0cDovL3d3dy5sYW1lc29ub3RoZXF1ZS5vcmcvY2F0YWxvZ3VlL0NIQU9SRDA2X0MuZnJlZQBUU1NFAAAAEAAAAExhdmY1NC42My4xMDQAAAAAAAAAAAAAAP/zgMQPAAAAAAAD6AAAAgAAAAIAAAR2lpmpmak1mYAAAAAADEmcAAAAAAP//AARTEEEAAAACAAAEgAAAAAADEwAAAAABeAAAAP8/AACQAAAAAAAAAAEAAACQAAAAgAAAAP8/AAAAAAAAAAEAAAAzAAAADAAAAP//AAAAAAAAAAEAAAAzAAAAEAAAAP//AAAAAAAAAAEAAAAzAAAAGAAAAP//AAAAAAAAAAEAAAAzAAAAIAAAAP//AAAAAAAAAAEAAAAzAAAAJAAAAP//AAAAAAAAAAEAAAAzAAAALAAAAP//AAAAAAAAAAEAAAAzAAAA0AAAAP//AAAAAAAAAAEAAAAzAAAA6AAAAP//AAAAAAAAAAEAAAAzAAAA+AAAAP//AAAAAAAAAANr//8AAAADADf/8AAAAAANv//8AAAADADb//8AAAADADX//8AAAADAA=="
+    // Fetch track details from Spotify API
+    try {
+        const response = await fetch(`${process.env.NEXT_PUBLIC_BASE_URL}/api/spotify?url=https://open.spotify.com/track/${trackId}`);
+        const data = await response.json();
+        if (!response.ok) {
+            return { success: false, error: data.error || 'Failed to fetch track details from Spotify.' };
         }
-    };
+        const previewUrl = data.preview_url;
+        if (!previewUrl) {
+            return { success: false, error: 'No preview available for this track.' };
+        }
+        // Download the preview audio
+        const audioRes = await fetch(previewUrl);
+        if (!audioRes.ok) {
+            return { success: false, error: 'Failed to download preview audio.' };
+        }
+        const arrayBuffer = await audioRes.arrayBuffer();
+        // Convert to base64
+        const base64String = Buffer.from(arrayBuffer).toString('base64');
+        return {
+            success: true,
+            file: {
+                name: `${trackId}.mp3`,
+                content: `data:audio/mpeg;base64,${base64String}`
+            }
+        };
+    } catch (error: any) {
+        return { success: false, error: error.message || 'Download failed.' };
+    }
 }

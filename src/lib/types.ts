@@ -50,4 +50,5 @@ export type DownloadStatus = 'idle' | 'downloading' | 'completed' | 'error';
 export type TrackDownloadState = {
   status: DownloadStatus;
   progress: number;
+  error?: string;
 };

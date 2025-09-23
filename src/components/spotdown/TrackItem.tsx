@@ -12,6 +12,7 @@ type TrackItemProps = {
   track: Track;
   status: DownloadStatus;
   progress: number;
+  error?: string;
   onDownload: () => void;
 };
 
@@ -55,6 +56,7 @@ export const TrackItem = memo(function TrackItem({
   track,
   status,
   progress,
+  error,
   onDownload,
 }: TrackItemProps) {
   return (
@@ -70,6 +72,9 @@ export const TrackItem = memo(function TrackItem({
       <div className="flex-1 min-w-0">
         <p className="font-semibold truncate">{track.title}</p>
         <p className="text-sm text-muted-foreground truncate">{track.artist}</p>
+        {status === 'error' && error && (
+          <p className="text-xs text-destructive mt-1">{error}</p>
+        )}
       </div>
       <div className="hidden md:flex items-center gap-2 text-muted-foreground text-sm">
         <Clock className="w-4 h-4" />

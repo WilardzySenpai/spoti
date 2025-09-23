@@ -62,27 +62,35 @@ export function TrackList({ content }: { content: SpotifyContent }) {
 
     try {
         const result = await downloadTrackAction(track.id);
-        if (result.success && result.file) {
-            const blob = base64ToBlob(result.file.content, 'audio/mpeg');
-            downloadFile(blob, `${track.artist} - ${track.title}.mp3`);
-            setTrackStates((prev) => ({
-                ...prev,
-                [track.id]: { status: 'completed', progress: 100 },
-            }));
-        } else {
-            throw new Error(result.error || 'Download failed.');
-        }
-    } catch (error: any) {
-        setTrackStates((prev) => ({
-            ...prev,
-            [track.id]: { status: 'error', progress: 0 },
-        }));
-        toast({
-            variant: 'destructive',
-            title: 'Download Error',
-            description: `Could not download "${track.title}". ${error.message}`,
-        });
+    if (result.success && result.file) {
+      const blob = base64ToBlob(result.file.content, 'audio/mpeg');
+      downloadFile(blob, `${track.artist} - ${track.title}.mp3`);
+      setTrackStates((prev) => ({
+        ...prev,
+        [track.id]: { status: 'completed', progress: 100 },
+      }));
+    } else {
+      setTrackStates((prev) => ({
+        ...prev,
+        [track.id]: { status: 'error', progress: 0, error: result.error },
+      }));
+      toast({
+        variant: 'destructive',
+        title: 'Download Error',
+        description: `Could not download "${track.title}". ${result.error || 'Download failed.'}`,
+      });
     }
+  } catch (error: any) {
+    setTrackStates((prev) => ({
+      ...prev,
+      [track.id]: { status: 'error', progress: 0, error: error.message },
+    }));
+    toast({
+      variant: 'destructive',
+      title: 'Download Error',
+      description: `Could not download "${track.title}". ${error.message}`,
+    });
+  }
   }, [trackStates, toast]);
 
   const handleBulkDownload = async () => {
@@ -164,6 +172,7 @@ export function TrackList({ content }: { content: SpotifyContent }) {
               track={track}
               status={trackStates[track.id]?.status ?? 'idle'}
               progress={trackStates[track.id]?.progress ?? 0}
+              error={trackStates[track.id]?.error}
               onDownload={() => handleDownload(track)}
             />
           ))}
