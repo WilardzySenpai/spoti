@@ -1,0 +1,40 @@
+{
+  "placeholderImages": [
+    {
+      "id": "album-art-1",
+      "description": "Abstract colorful geometric patterns",
+      "imageUrl": "https://images.unsplash.com/photo-1533135091724-62cc5402aa20?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHwxfHxhYnN0cmFjdCUyMGdlb21ldHJpY3xlbnwwfHx8fDE3NTg1ODM5MjR8MA&ixlib=rb-4.1.0&q=80&w=1080",
+      "imageHint": "abstract geometric"
+    },
+    {
+      "id": "album-art-2",
+      "description": "A serene landscape with mountains and a lake",
+      "imageUrl": "https://images.unsplash.com/photo-1735749108985-ff839bcb0504?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHw5fHxzZXJlbmUlMjBsYW5kc2NhcGV8ZW58MHx8fHwxNzU4NTg4OTM0fDA&ixlib=rb-4.1.0&q=80&w=1080",
+      "imageHint": "serene landscape"
+    },
+    {
+      "id": "album-art-3",
+      "description": "A vibrant city skyline at night",
+      "imageUrl": "https://images.unsplash.com/photo-1486406146926-c627a92ad1ab?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHw0fHxjaXR5JTIwc2t5bGluZXxlbnwwfHx8fDE3NTg1ODIyMzZ8MA&ixlib=rb-4.1.0&q=80&w=1080",
+      "imageHint": "city skyline"
+    },
+    {
+      "id": "album-art-4",
+      "description": "A retro wave sunset",
+      "imageUrl": "https://images.unsplash.com/photo-1697541986349-08125ac922a1?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHw4fHxyZXRybyUyMHN1bnNldHxlbnwwfHx8fDE3NTg2MjE1ODR8MA&ixlib=rb-4.1.0&q=80&w=1080",
+      "imageHint": "retro sunset"
+    },
+    {
+      "id": "album-art-default",
+      "description": "A musical note on a textured background",
+      "imageUrl": "https://images.unsplash.com/photo-1591025810539-a321000cda85?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHw1fHxtdXNpYyUyMG5vdGV8ZW58MHx8fHwxNzU4NjA4MzMyfDA&ixlib=rb-4.1.0&q=80&w=1080",
+      "imageHint": "music note"
+    },
+    {
+      "id": "downloaded-track",
+      "description": "A vinyl record on a player",
+      "imageUrl": "https://images.unsplash.com/photo-1502444933994-b7c9925345b5?q=80&w=2070&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
+      "imageHint": "vinyl record"
+    }
+  ]
+}
