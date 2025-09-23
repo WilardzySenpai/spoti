@@ -2,6 +2,15 @@ import type {NextConfig} from 'next';
 
 const nextConfig: NextConfig = {
   /* config options here */
+  // Allow both localhost and public URL for Server Actions in dev
+  experimental: {
+    serverActions: {
+      allowedOrigins: [
+        'http://localhost:9002',
+        'https://super-duper-waddle-74wg7gqvjrwhx5pw-9002.app.github.dev',
+      ],
+    },
+  },
   typescript: {
     ignoreBuildErrors: true,
   },
