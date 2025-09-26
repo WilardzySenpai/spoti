@@ -61,36 +61,42 @@ export function TrackList({ content }: { content: SpotifyContent }) {
     }));
 
     try {
-        const result = await downloadTrackAction(track.id);
-    if (result.success && result.file) {
-      const blob = base64ToBlob(result.file.content, 'audio/mpeg');
+      // Call the backend API to get the MP3 file
+      const res = await fetch('/api/download', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ spotifyTrackId: track.id }),
+      });
+      if (!res.ok) {
+        const errorData = await res.json();
+        setTrackStates((prev) => ({
+          ...prev,
+          [track.id]: { status: 'error', progress: 0, error: errorData.error || 'Download failed' },
+        }));
+        toast({
+          variant: 'destructive',
+          title: 'Download Error',
+          description: errorData.error || 'Download failed',
+        });
+        return;
+      }
+      const blob = await res.blob();
       downloadFile(blob, `${track.artist} - ${track.title}.mp3`);
       setTrackStates((prev) => ({
         ...prev,
         [track.id]: { status: 'completed', progress: 100 },
       }));
-    } else {
+    } catch (err: any) {
       setTrackStates((prev) => ({
         ...prev,
-        [track.id]: { status: 'error', progress: 0, error: result.error },
+        [track.id]: { status: 'error', progress: 0, error: err.message || 'Download failed' },
       }));
       toast({
         variant: 'destructive',
         title: 'Download Error',
-        description: `Could not download "${track.title}". ${result.error || 'Download failed.'}`,
+        description: err.message || 'Download failed',
       });
     }
-  } catch (error: any) {
-    setTrackStates((prev) => ({
-      ...prev,
-      [track.id]: { status: 'error', progress: 0, error: error.message },
-    }));
-    toast({
-      variant: 'destructive',
-      title: 'Download Error',
-      description: `Could not download "${track.title}". ${error.message}`,
-    });
-  }
   }, [trackStates, toast]);
 
   const handleBulkDownload = async () => {
