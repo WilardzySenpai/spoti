@@ -1,18 +1,23 @@
-import ytSearch from 'yt-search';
+import { YouTube } from 'youtube-sr';
 
 export async function searchYouTube(query: string) {
-  const result = await ytSearch(query);
-  if (!result.videos.length) return null;
-  // Return the top video result
-  const video = result.videos[0];
-  return {
-    title: video.title,
-    url: video.url,
-    videoId: video.videoId,
-    duration: video.timestamp,
-    views: video.views,
-    author: video.author.name,
-  };
+  try {
+    const results = await YouTube.search(query, { limit: 1, type: 'video' });
+    if (!results || results.length === 0) return null;
+
+    const video = results[0];
+    return {
+      title: video.title ?? 'Unknown Title',
+      url: video.url,
+      videoId: video.id,
+      duration: video.durationFormatted ?? '0:00',
+      views: video.views ?? 0,
+      author: video.channel?.name ?? 'Unknown Author',
+    };
+  } catch (err) {
+    console.error('YouTube search failed:', err);
+    return null;
+  }
 }
 
 // Example usage:
